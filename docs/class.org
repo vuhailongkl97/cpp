@@ -1,0 +1,32 @@
+#+TITLE: Class
+
+* Static member
++ due to it isn't member of any instance -> it need to initialize out of class's scope as global variable
+
+#+begin_src C++
+class test{
+    public:
+       test() = default;
+       static int x;
+};
+
+int test::x = 10;
+#+end_src
+
+but we can use this
+#+begin_src C++
+class test{
+    public:
+       test() = default;
+       static const int x = 10;
+       //static constexpr int x = 10;
+};
+
+#+end_src
++ aggregate class like define class with specifier is public
+  #+begin_src C++
+    struct x{
+        int a;
+        void show();
+    }
+  #+end_src

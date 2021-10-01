@@ -1,23 +1,28 @@
 #include <iostream>
-using namespace std;
+#include <vector>
+#include <array>
+#include <list>
 
+class test{
+    public:
+       test() = default;
+       static constexpr int x = 10;
+       int v = 1;
+       void show(int a = x);
+};
 
-/*
- * print out format \127 mean get value in ascii with 127 in octal
- */
-
-void print_out(void)
+void test::show(int a)
 {
-    cout << "Who goes with F\127rgus?\012" << endl;
+    std::cout << a << std::endl;
 }
-
 
 int main(void)
 {
-    print_out();
+    std::list<int> a;
+    a.assign({1,2,3,4});
 
-    char a = 'A';
-    char b = L'A';
-
+    for (std::list<int>::iterator it =a.begin(); it !=a.end(); ++it) {
+        std::cout << *it << std::endl;
+    }
     return 0;
 }
