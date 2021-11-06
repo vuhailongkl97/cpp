@@ -1,0 +1,79 @@
+#+TITLE: Containers
+
+* Sequential container
+** Introduction
+|----------------------+---------------+----------------------+--------------------+------------------------|
+| container\attributes | flexible size | random access        | insert/delete      | note                   |
+|----------------------+---------------+----------------------+--------------------+------------------------|
+| vector               | yes           | yes                  | back is fast       |                        |
+| deque                | yes           | yes                  | fast at front/back |                        |
+| list                 | yes           | No , sequence access | fast at any point  | bidirection            |
+| forward_list         | yes           | yes                  | fast at any point  | one direction          |
+| array                | fixed size    | yes                  | don't support      |                        |
+| string               | yes           | yes                  | back is fast       | special type of vector |
+|----------------------+---------------+----------------------+--------------------+------------------------|
+
+** Container operations
+| aliases type    | properties                                                     |
+|-----------------+----------------------------------------------------------------|
+| iterator        | type of the iterator for this container type                   |
+| const_iterator  | iterator type but can't change it's value                      |
+| size_type       | unsigned integral for size of container type                   |
+| difference_type | signed integral big enough to hold distance between 2 iterator |
+| value_type      | Element type                                                   |
+| reference       | Element's lvalue type                                          |
+
+#+begin_src cpp
+    string s("abcdef");
+    for (string::iterator it = s.begin(); it !=s.end(); ++it) {
+       string::reference s = *it;
+       s+=1;
+    }
+
+    for (string::iterator it=s.begin(); it!=s.end() ;++it) {
+        string::const_reference s = *it;
+        cout << s << endl;
+    }
+
+└─[0] <> g++ test.cpp
+┌─[longkl@longkl] - [~/working/cpp] - [2021-10-03 10:15:49]
+└─[0] <> ./a.out
+b
+c
+d
+e
+f
+g
+
+#+end_src
+*** Initializing a container as copy of Another container
+#+begin_src  cpp
+vector<string> va({"abc", "def"});
+forward_list<string> fl(va.begin(), va.end())
+#+end_src
+
+*** Access element in sequential container
+subscript operator
+#+begin_src  cpp
+    c.back(), c.front(), c[n], c.at()
+    exception may happened is out of range
+#+end_src
+*** NOTE
++ forward_list don't support the decrement (--) operator. this is signle linked list therefor it have special operation to insert, remove like insert_after, emplace_after
++ push_front is supported for sequential type except string and vector
++ emplace_front/back can use as a push_front/back + constructor directly
++ when erase or insert a element to container -> may be reference, pointer, iterator get from before the time are invalid value -> need update them.
++ emplace is quite same with push. one difference between them is emplace accept add element with pass value for constructor of a element used for add to container.
+
+
+#+begin_src  cpp
+class cl{
+    public:
+        int x;
+        cl(int _x):x(_x){};
+        cl() = default;
+};
+vector<cl> vec_cl;
+//emplace_front will init x and add to vec_cl
+vec_cl.emplace_front(12);
+#+end_src

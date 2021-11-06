@@ -1,28 +1,38 @@
-#include <iostream>
-#include <vector>
-#include <array>
-#include <list>
+#include <bits/stdc++.h>
+
+using namespace std;
 
 class test{
     public:
-       test() = default;
-       static constexpr int x = 10;
-       int v = 1;
-       void show(int a = x);
+        explicit test(int _x):x(_x){
+            cout << "constructor\n";
+        }
+
+        explicit test(initializer_list<int>(a)){
+            cout << "ffconstructor\n";
+        }
+        ~test(){
+            cout << "destructor\n";
+        }
+    private:
+        int x;
 };
 
-void test::show(int a)
+void show(test &x)
 {
-    std::cout << a << std::endl;
+
 }
 
-int main(void)
+void show(shared_ptr<test> pt)
 {
-    std::list<int> a;
-    a.assign({1,2,3,4});
 
-    for (std::list<int>::iterator it =a.begin(); it !=a.end(); ++it) {
-        std::cout << *it << std::endl;
-    }
+}
+
+int main()
+{
+    test *x = new test(1);
+    show(shared_ptr<test>(x));
+    delete x;
+
     return 0;
 }
