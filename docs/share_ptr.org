@@ -1,0 +1,78 @@
+#+TITLE: Smart Pointer
+
+* shared_ptr
+** Pros:
+Use share_ptr for safer when using dynamic memory
+
+** Practical usecase
+*** Use smart pointer with C library or other which don't use smart pointer exception can met and the program don't release resource
+
+#+begin_src
+void create_obj()
+{
+    cout << __func__ << endl;
+}
+
+int main()
+{
+    test *x = new test(10);
+    shared_ptr<test> px(x, [](test *x){cout << "okk destroy"<< endl;});
+
+    return 0;
+}
+#+end_src
+
+
+** Note:
+*** Don't mixing regular pointer and smart pointer
+#+begin_src
+class test{
+    public:
+        explicit test(int _x):x(_x){
+            cout << "constructor\n";
+        }
+
+        explicit test(initializer_list<int>(a)){
+            cout << "ffconstructor\n";
+        }
+        ~test(){
+            cout << "destructor\n";
+        }
+    private:
+        int x;
+};
+
+void show(test &x)
+{
+
+}
+
+void show(shared_ptr<test> pt)
+{
+
+}
+
+int main()
+{
+    test *x = new test(1);
+    show(shared_ptr<test>(x));
+    delete x;
+    return 0;
+}
+
+└─[0] <> g++ main.cpp&& ./a.out
+constructor
+destructor
+destructor
+free(): double free detected in tcache 2
+[1]    17142 abort (core dumped)  ./a.out
+
+#+end_src
+
+*** If you use a smart pointer to manage a resource other than memory allocated by new, remember to pass a deleter
+
+
+* unique_ptr
+is shared_ptr with only one owner
+** behavior :
+unique_ptr.release()-> pointer. destroy current unique_ptr, and return pointer
