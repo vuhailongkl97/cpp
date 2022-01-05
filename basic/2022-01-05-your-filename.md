@@ -1,6 +1,5 @@
 ## std::move, std::forward and note
 
-
 noexcept, 
 __attribute__((inline)), inline (compiler do parser, check) over macro
 throw std::logic_error
