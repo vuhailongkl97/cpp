@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/long/working/cpp/template/concepts",
+  "command": "/usr/bin/c++      -g -fconcepts -o CMakeFiles/concepts.dir/concepts.cpp.o -c /home/long/working/cpp/template/concepts/concepts.cpp",
+  "file": "/home/long/working/cpp/template/concepts/concepts.cpp"
+}
+]
