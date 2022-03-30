@@ -60,13 +60,61 @@ void doSomething(Args... args) {
     }
 }
 
+template <typename T>
+struct Bank
+{
+    Bank() = default;
+    void make_transfer(T& from, T&to, double amount)
+    {
+       from -= amount;
+       to   += amount;
+    }
+};
+
+struct Account
+{
+    Account() = delete;
+    Account(long default_amount) : _amount(default_amount) {}
+    Account& operator -=(double amount);
+    Account& operator +=(double amount);
+    void show_amount()
+    {
+       std::cout << "amount "  << _amount << "\n";
+    }
+    long _amount;
+};
+
+Account& Account::operator -=(double amount)
+{
+    this->_amount -= amount;
+    return *this;
+}
+Account& Account::operator +=(double amount)
+{
+    this->_amount += amount;
+    return *this;
+}
+
 int main()
 {
     int x = 123;
     int arr[] = {1,2,3,4};
     // std::cout << mean_array(arr);
     // std::cout << mean_array<int>(1,2,3,5);
-    doSomething(1,2,3,4,5,6);
+//    doSomething(1,2,3,4,5,6);
+    Bank<long> bank;
+
+    long from, to;
+    from = 100, to = 0;
+    bank.make_transfer(from, to, 12);
+
+    Bank<Account> ba;
+    Account afrom{123};
+    Account ato{45};
+    ba.make_transfer(afrom, ato, 12);
+
+    afrom.show_amount();
+    ato.show_amount();
 
     return 0;
 }
