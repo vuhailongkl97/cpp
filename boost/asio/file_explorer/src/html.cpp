@@ -7,7 +7,7 @@ html::html(const std::string &requestMsg) {
     std::string tmp_req(requestMsg);
 
     std::transform(tmp_req.begin(), tmp_req.end(), tmp_req.begin(),
-                   [](char c) { return (c < 30) ? ' ' : c; });
+                   [](char c) { return (c < READABLE_CHAR_LIMIT) ? ' ' : c; });
 
     auto matched = std::regex_match(tmp_req, results, _regex);
 
@@ -29,18 +29,18 @@ html::html(const std::string &requestMsg) {
         this->_method = UNKNOW;
     }
 }
-const std::string html::fmt_file_dir(bool is_dir, const std::string &name) {
+auto html::fmt_file_dir(bool is_dir, const std::string &name) -> std::string {
     std::stringstream ss;
     ss << " <a href=";
     if (is_dir) {
         ss << name << "> " << name << "</a>";
         return ss.str();
-    } else {
-        return name;
     }
+    return name;
 }
 
-std::stringstream &&html::fill_header4http(const std::string &content) {
+auto html::fill_header4http(const std::string &content)
+    -> std::stringstream && {
     static std::stringstream ss;
     ss.str("");
 
@@ -57,10 +57,12 @@ std::stringstream &&html::fill_header4http(const std::string &content) {
     return std::move(ss);
 }
 
-html::METHOD html::get_requested_method() { return this->_method; }
-const std::string &html::get_requested_path() { return this->requested_path; }
+auto html::get_requested_method() -> html::METHOD { return this->_method; }
+auto html::get_requested_path() -> const std::string & {
+    return this->requested_path;
+}
 
-html::METHOD html::str2method(const std::string &str) {
+auto html::str2method(const std::string &str) -> html::METHOD {
     static std::map<std::string, METHOD> mapping = {
         {"GET", GET}, {"POST", POST}, {"PUSH", PUSH}};
     return mapping[str];

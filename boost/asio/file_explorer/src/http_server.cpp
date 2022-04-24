@@ -1,24 +1,32 @@
 #include "http_server.h"
 
-HTTP_Server::HTTP_Server(const std::string &host,
-                         const std::string &protocol) noexcept
-    : acceptor{io} {
-    boost::system::error_code ec;
-    boost::asio::ip::tcp::resolver _resolvers{io};
-    auto result = _resolvers.resolve(host, protocol);
+HTTP_Server::HTTP_Server(const std::string &host, const std::string &protocol)
+    : io{1}, acceptor{io} {
 
-    for (const auto &i : result)
-        std::cout << i.endpoint() << " hostname : " << i.host_name() << "\n";
+    try {
+        boost::system::error_code ec;
+        boost::asio::ip::tcp::resolver _resolvers{io};
+        auto result = _resolvers.resolve(host, protocol);
 
-    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(),
-                                            stoi(protocol));
-    acceptor.open(endpoint.protocol());
+        for (const auto &i : result) {
+            std::cout << i.endpoint() << " hostname : " << i.host_name()
+                      << "\n";
+        }
 
-    acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
-    acceptor.bind(endpoint);
+        boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(),
+                                                stoi(protocol));
+        acceptor.open(endpoint.protocol());
+
+        acceptor.set_option(
+            boost::asio::ip::tcp::acceptor::reuse_address(true));
+        acceptor.bind(endpoint);
+    } catch (boost::system::error_code &ec) {
+        std::cerr << "error at init " << ec.what() << "\n";
+        exit(-1);
+    }
 }
 
-void HTTP_Server::start() {
+auto HTTP_Server::start() -> void {
     try {
         auto future = std::async(std::launch::async, [&]() {
             acceptor.listen();
@@ -41,7 +49,8 @@ void HTTP_Server::start() {
             boost::asio::async_write(
                 socket, buf,
                 [](boost::system::error_code ec, size_t transferred) {
-                    std::cout << "written size = " << transferred << "\n";
+                    std::cout << "written size = " << transferred
+                              << "\n ec = " << ec << "\n";
                 });
         });
     } catch (boost::system::error_code &ec) {
@@ -50,9 +59,10 @@ void HTTP_Server::start() {
     // prepare for another request
     start();
 }
-bool HTTP_Server::stop() { return true; }
+auto HTTP_Server::stop() -> bool { return true; }
 
-boost::asio::const_buffer HTTP_Server::handleMsg(const std::string &request) {
+auto HTTP_Server::handleMsg(const std::string &request)
+    -> boost::asio::const_buffer {
 
     static std::string response;
     response.clear();
@@ -69,14 +79,16 @@ boost::asio::const_buffer HTTP_Server::handleMsg(const std::string &request) {
             std::cout << req.get_requested_path() << " << requested path \n";
             fs::path parent_fs_path(req_path);
             fs::path parent_path("/");
-            if (std::count(req_path.begin(), req_path.end(), '/') > 1)
+            if (std::count(req_path.begin(), req_path.end(), '/') > 1) {
                 parent_path = parent_fs_path.parent_path();
+            }
 
             Files parent_a(parent_path.c_str());
-            ss << "<h1> Current Directory : " << parent_a << "</h1>\n";
+            ss << "<h1> Parent Directory : " << parent_a << "</h1>\n";
 
-            for (auto &i : a)
+            for (auto &i : a) {
                 ss << i << "<br>\n";
+            }
 
             ss = html::fill_header4http(ss.str());
 

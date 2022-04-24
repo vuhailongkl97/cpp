@@ -9,11 +9,11 @@
 class HTTP_Server {
 
   public:
-    HTTP_Server(const std::string &host, const std::string &protocol) noexcept;
+    HTTP_Server(const std::string &host, const std::string &protocol);
     void start();
-    bool stop();
-
-    boost::asio::const_buffer handleMsg(const std::string &request);
+    static auto stop() -> bool;
+    static auto handleMsg(const std::string &request)
+        -> boost::asio::const_buffer;
 
   private:
     boost::asio::io_context io;

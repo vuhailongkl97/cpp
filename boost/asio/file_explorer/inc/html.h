@@ -4,20 +4,23 @@
 #include <regex>
 #include <string>
 
+const int READABLE_CHAR_LIMIT = 30;
 class html {
 
   public:
     enum METHOD { GET = 1, POST = 2, PUSH = 3, UNKNOW };
 
     html() = delete;
-    html(const std::string &requestMsg);
+    explicit html(const std::string &requestMsg);
 
-    METHOD get_requested_method();
-    const std::string &get_requested_path();
-    static const std::string fmt_file_dir(bool is_dir, const std::string &name);
-    static std::stringstream &&fill_header4http(const std::string &content);
+    auto get_requested_method() -> METHOD;
+    auto get_requested_path() -> const std::string &;
+    static auto fmt_file_dir(bool is_dir, const std::string &name)
+        -> std::string;
+    static auto fill_header4http(const std::string &content)
+        -> std::stringstream &&;
 
-    static METHOD str2method(const std::string &str);
+    static auto str2method(const std::string &str) -> METHOD;
 
   private:
     METHOD _method;

@@ -10,7 +10,7 @@
 
 using tcp = boost::asio::ip::tcp; // from <boost/asio/ip/tcp.hpp>
 
-int main(int argc, char *argv[]) {
+auto main(int argc, char *argv[]) -> int {
     // Check command line arguments.
     if (argc != 3) {
         std::cerr << "Usage: " << argv[0] << " ip protocol\n";

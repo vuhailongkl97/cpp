@@ -10,13 +10,13 @@ namespace fs = std::experimental::filesystem;
 
 class Files {
   public:
-    Files(const std::string &fs);
     Files(Files &&o) = delete;
-    const auto get_name() const;
-    bool is_directory() const;
-    friend std::ostream &operator<<(std::ostream &os, const Files &f);
+    explicit Files(const std::string &fs);
+    auto get_name() const -> auto;
+    auto is_directory() const -> bool;
+    friend auto operator<<(std::ostream &os, const Files &f) -> std::ostream &;
     Files(const Files &o);
-    static std::vector<Files> read_path(fs::path &&path);
+    static auto read_path(fs::path &&path) -> std::vector<Files>;
 
   private:
     std::shared_ptr<fs::path> _fs;
