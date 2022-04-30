@@ -1,0 +1,7 @@
+
+* Briefly describe this practical project
+
+** what's it ?
+This supported travere a folder in HTTP server.
+This is a practical project with supported library boost::asio.
+Networking with HTTP protocol.

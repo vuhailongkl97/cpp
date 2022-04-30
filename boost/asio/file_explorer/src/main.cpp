@@ -1,7 +1,6 @@
 #include "files.h"
 #include "html.h"
 #include "http_server.h"
-#include <boost/algorithm/string/case_conv.hpp>
 #include <cstdlib>
 #include <iostream>
 #include <memory>
