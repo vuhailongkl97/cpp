@@ -1,0 +1,7 @@
+#+TITLE: Pimpl
+* Definition
+** Pimpl : Pointer to implementation
+
+* Note
+** Make the header and implementation lose coupling -> reduce compile-time
+** Pointer in the class should be a unique_ptr (smart pointer) instead of shared_ptr which make the program quite overhead
