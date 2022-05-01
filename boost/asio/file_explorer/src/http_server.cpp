@@ -45,7 +45,9 @@ auto HTTP_Server::start() -> void {
             std::cout << "request " << request << "\n";
 #endif
 
-            boost::asio::const_buffer buf = handleMsg(request);
+            std::string var = std::move(handleMsg(request));
+            auto length = var.length();
+            boost::asio::const_buffer buf{std::move(var).data(), length};
             boost::asio::async_write(
                 socket, buf,
                 [](boost::system::error_code ec, size_t transferred) {
@@ -62,9 +64,9 @@ auto HTTP_Server::start() -> void {
 auto HTTP_Server::stop() -> bool { return true; }
 
 auto HTTP_Server::handleMsg(const std::string &request)
-    -> boost::asio::const_buffer {
+    -> std::string {
 
-    static std::string response;
+    std::string response;
     response.clear();
     html req(request);
 
@@ -98,5 +100,6 @@ auto HTTP_Server::handleMsg(const std::string &request)
             exit(0);
         }
     }
-    return {response.data(), response.length()};
+
+    return response;
 }

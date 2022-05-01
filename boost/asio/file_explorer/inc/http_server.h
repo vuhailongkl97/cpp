@@ -13,7 +13,7 @@ class HTTP_Server {
     void start();
     static auto stop() -> bool;
     static auto handleMsg(const std::string &request)
-        -> boost::asio::const_buffer;
+        -> std::string;
 
   private:
     boost::asio::io_context io;

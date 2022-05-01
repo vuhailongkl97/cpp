@@ -9,8 +9,7 @@ set(CMAKE_CXX_CLANG_TIDY
 #  -warnings-as-errors=*;)
 
 add_executable(hello src/main.cpp src/html.cpp src/files.cpp src/http_server.cpp)
-
-
+set(CMAKE_BUILD_TYPE Debug)
 SET(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "/home/long/bin/include")
 SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "/home/long/bin")
 
