@@ -63,8 +63,7 @@ auto HTTP_Server::start() -> void {
 }
 auto HTTP_Server::stop() -> bool { return true; }
 
-auto HTTP_Server::handleMsg(const std::string &request)
-    -> std::string {
+auto HTTP_Server::handleMsg(const std::string &request) -> std::string {
 
     std::string response;
     response.clear();

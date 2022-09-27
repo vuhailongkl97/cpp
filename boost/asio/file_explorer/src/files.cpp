@@ -1,7 +1,7 @@
 #include "files.h"
 
 Files::Files(const std::string &fs) : _fs{new fs::path(fs)} {}
-auto Files::get_name() const -> auto { return _fs->c_str(); }
+auto Files::get_name() const -> auto{ return _fs->c_str(); }
 auto Files::is_directory() const -> bool { return fs::is_directory(*_fs); }
 auto operator<<(std::ostream &os, const Files &f) -> std::ostream & {
     os << html::fmt_file_dir(f.is_directory(), f.get_name());
