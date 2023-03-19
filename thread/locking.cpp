@@ -28,7 +28,6 @@ void deadlock_test() {
     th2.join();
     cout << __func__ << "shared_value " << shared_value << " DONE\n";
 }
-
 void antiDeadlockWorker(mutex &t1, mutex &t2) {
     std::scoped_lock sl(t1, t2);
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -38,7 +37,7 @@ void antiDeadlockWorker(mutex &t1, mutex &t2) {
 void antiDeadLock_test() {
     shared_value = 1000000;
     microseconds result;
-    StopWatch sw(result);
+    StopWatch<microseconds> sw(result);
     std::thread th1(antiDeadlockWorker, std::ref(t1), std::ref(t2));
     std::thread th2(antiDeadlockWorker, std::ref(t2), std::ref(t1));
     th1.join();
@@ -74,8 +73,13 @@ void livelock_test() {
     cout << __func__ << "shared_value " << shared_value << " DONE\n";
 }
 int main() {
+    std::cout << __cplusplus << "\n";
+    std::this_thread::get_id();
+    (void)std::stoi("12");
+    deadlock_test();
     // deadlock_test();
     antiDeadLock_test();
+	livelock_test();
     livelock_test();
     return 0;
 }

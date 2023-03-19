@@ -21,6 +21,7 @@ class ThreadPool {
     bool enqueue(CallAble &fun, T &&...args) {
         std::unique_lock<std::mutex> l(m_lock);
         m_cv.wait(l, [this]() {
+			std::cout << "waiting\n";
             return (!terminate && (mv_pool.size() <= maxThreads));
         });
 
@@ -56,13 +57,13 @@ class ThreadPool {
 
 bool th1(int &i) {
     auto tmp = i;
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(i*4000));
     i *= 2;
-
+	std::cout << "done " << i << "\n";
     return true;
 }
 int main() {
-    ThreadPool p(3);
+    ThreadPool p(1);
     auto f1 = p.loop();
     int i = 1;
     p.enqueue(th1, std::ref(i));
