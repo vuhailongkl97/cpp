@@ -1,1 +1,5 @@
 */ex/*/*/*
+*/build/*
+.cache*
+.ccls*
+*.out
